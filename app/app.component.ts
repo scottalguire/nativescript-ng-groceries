@@ -1,31 +1,25 @@
 import { Component } from "@angular/core";
+import { User } from "./shared/user/user";
 
 @Component({
   selector: "my-app",
-  template: `
-    <StackLayout>
-      <Image src="res://logo_login" stretch="home" horizontalAlignment="center"></Image>
-      <TextField hint="Email Address" keyboardType="email" [(ngModel)]="email"
-        autocorrect="false" autocapitalizationType="none"></TextField>
-      <TextField hint="Password" secure="true"></TextField>
-
-      <Button [text]="isLoggingIn ? 'Sign in' : 'Sign up'" class="submit-button" (tap)="submit()"></Button>
-      <Button [text]="isLoggingIn ? 'Sign up for Groceries' : 'Back to login'" (tap)="toggleDisplay()"></Button>
-    </StackLayout>
-  `,
+  templateUrl: 'pages/login/login.html',
   styleUrls: ["pages/login/login-common.css", "pages/login/login.css"]
 })
 export class AppComponent {
-
-  email = "nativescripthook@telerik.com";
+  user: User;
   isLoggingIn = true;
 
-  submit(){
-    alert("You're using: " + this.email);
+  constructor() {
+    this.user = new User();
+  }
+
+  submit() {
+    alert("You're using: " + this.user.email);
     console.log(`hello ${new Date()}`);
   }
-  toggleDisplay(){
+  toggleDisplay() {
     this.isLoggingIn = !this.isLoggingIn;
-
+    
   }
- }
+}
