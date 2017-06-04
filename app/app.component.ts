@@ -14,6 +14,9 @@ export class AppComponent {
 
   constructor(private userService: UserService) {
     this.user = new User();
+    //hardcode my user credentials for development purposes
+    this.user.email = "scott@groceries.com";
+    this.user.password = "gr0ceries";
   }
 
   submit() {
@@ -30,7 +33,14 @@ export class AppComponent {
     //todo
   }
   signUp() {
-    this.userService.register(this.user);
+    this.userService.register(this.user)
+      .subscribe(
+        () => {
+          alert("Your account was successfully created.");
+          this.toggleDisplay();
+        },
+        () => alert("Unfortunately we were unable to create your account.")
+      );
   }
 
   toggleDisplay() {

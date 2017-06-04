@@ -10,3 +10,4 @@ app/pages/*.js
 app/pages/**/*.js
 app/shared/*.js
 app/shared/**/*.js
+app/utils/*.js
