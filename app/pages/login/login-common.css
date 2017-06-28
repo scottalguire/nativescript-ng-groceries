@@ -18,3 +18,8 @@ Button, TextField {
   color: white;
   margin-top: 20;
 }
+.primary-button {
+  background-color: #a6be1f;
+  color: white;
+  margin-top: 0;
+}
