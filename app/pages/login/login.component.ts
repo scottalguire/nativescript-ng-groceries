@@ -7,30 +7,48 @@ import { Page } from "ui/page";
 import { Color } from "color";
 import { View } from "ui/core/view";
 
+import { MockUser } from "./mock-user";
+import { MOCKUSERS } from "./mock-users";
+import { MockUserService } from "./mock-user.service";
+
 @Component({
   selector: "my-app",
-  providers: [UserService],
+  providers: [UserService, MockUserService],
   templateUrl: 'pages/login/login.html',
   styleUrls: ["pages/login/login-common.css", "pages/login/login.css"]
 })
 export class LoginComponent implements OnInit {
   user: User;
   isLoggingIn = true;
+  userNum: number = 0;
 
   @ViewChild("container") container: ElementRef;
-  
-  constructor(private router: Router, private userService: UserService, private page: Page) {
+
+  constructor(
+    private router: Router,
+    private userService: UserService,
+    private page: Page,
+    private mockUserService: MockUserService) {
     this.user = new User();
-    // hardcode my user credentials for development purposes
-    // this.user.email = "scott@groceries.com";
-    // this.user.password = "gr0ceries";
-    this.user.email = "user@nativescript.org";
-    this.user.password = "password";
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.page.actionBarHidden = true;
     this.page.backgroundImage = "res://bg_login"
+    this.curUser(this.userNum); // Set to autofill the mock user (0: Scott, 1: Generic)
+  }
+
+  setUser(num: number){
+    this.userNum = num;
+    this.curUser(this.userNum);
+  }
+  
+  curUser(id: number) {
+    this.mockUserService.getUser(id)
+      .then(res => {
+        this.user.email = res.email;
+        this.user.password = res.password;
+      });
   }
 
   submit() {
@@ -46,18 +64,18 @@ export class LoginComponent implements OnInit {
   login() {
     this.userService.login(this.user)
       .subscribe(
-        () => this.router.navigate(["/list"]),
-        (error) => alert("Unfortunately we could not find your account.")
+      () => this.router.navigate(["/list"]),
+      (error) => alert("Unfortunately we could not find your account.")
       );
   }
   signUp() {
     this.userService.register(this.user)
       .subscribe(
-        () => {
-          alert("Your account was successfully created.");
-          this.toggleDisplay();
-        },
-        () => alert("Unfortunately we were unable to create your account.")
+      () => {
+        alert("Your account was successfully created.");
+        this.toggleDisplay();
+      },
+      () => alert("Unfortunately we were unable to create your account.")
       );
   }
 
