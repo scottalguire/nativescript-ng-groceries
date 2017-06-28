@@ -21,9 +21,11 @@ export class LoginComponent implements OnInit {
   
   constructor(private router: Router, private userService: UserService, private page: Page) {
     this.user = new User();
-    //hardcode my user credentials for development purposes
-    this.user.email = "scott@groceries.com";
-    this.user.password = "gr0ceries";
+    // hardcode my user credentials for development purposes
+    // this.user.email = "scott@groceries.com";
+    // this.user.password = "gr0ceries";
+    this.user.email = "user@nativescript.org";
+    this.user.password = "password";
   }
 
   ngOnInit(){
