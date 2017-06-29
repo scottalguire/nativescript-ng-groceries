@@ -55,12 +55,18 @@ export class LoginComponent implements OnInit {
     //alert("You're using: " + this.user.email);
     console.log(`hello ${new Date()}`);
 
+    if(!this.user.isValidEmail()){
+      alert("Enter a valid email address");
+      return;
+    }
+
     if (this.isLoggingIn) {
       this.login();
     } else {
       this.signUp();
     }
   }
+
   login() {
     this.userService.login(this.user)
       .subscribe(
@@ -68,6 +74,7 @@ export class LoginComponent implements OnInit {
       (error) => alert("Unfortunately we could not find your account.")
       );
   }
+  
   signUp() {
     this.userService.register(this.user)
       .subscribe(
