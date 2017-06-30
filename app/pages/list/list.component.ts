@@ -3,6 +3,8 @@ import { Grocery } from "../../shared/grocery/grocery";
 import { GroceryListService } from "../../shared/grocery/grocery-list.service";
 import { TextField } from "ui/text-field";
 
+import * as SocialShare from "nativescript-social-share";
+
 @Component({
     selector: "list",
     templateUrl: "pages/list/list.html",
@@ -21,14 +23,14 @@ export class ListComponent implements OnInit {
     ngOnInit() {
         this.isLoading = true;
         setTimeout(() => { //simulate x seconds of server latency
-        this.groceryListService.load()
-            .subscribe(loadedGroceries => {
-                loadedGroceries.forEach((groceryObject) => {
-                    this.groceryList.unshift(groceryObject);
+            this.groceryListService.load()
+                .subscribe(loadedGroceries => {
+                    loadedGroceries.forEach((groceryObject) => {
+                        this.groceryList.unshift(groceryObject);
+                    });
+                    this.isLoading = false;
+                    this.listLoaded = true;
                 });
-                this.isLoading = false;
-                this.listLoaded = true;
-            });
         }, 3000);
     }
 
@@ -56,5 +58,13 @@ export class ListComponent implements OnInit {
                 this.grocery = "";
             }
             )
+    }
+
+    share() {
+        let listString = this.groceryList
+            .map(grocery => grocery.name)
+            .join(", ")
+            .trim();
+        SocialShare.shareText(listString);
     }
 }
