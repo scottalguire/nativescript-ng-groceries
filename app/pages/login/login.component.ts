@@ -11,6 +11,9 @@ import { MockUser } from "./mock-user";
 import { MOCKUSERS } from "./mock-users";
 import { MockUserService } from "./mock-user.service";
 
+import { setHintColor } from "../../utils/hint-util";
+import { TextField } from "ui/text-field";
+
 @Component({
   selector: "my-app",
   providers: [UserService, MockUserService],
@@ -23,6 +26,8 @@ export class LoginComponent implements OnInit {
   userNum: number = 0;
 
   @ViewChild("container") container: ElementRef;
+  @ViewChild("email") email: ElementRef;
+  @ViewChild("password") password: ElementRef;
 
   constructor(
     private router: Router,
@@ -38,11 +43,24 @@ export class LoginComponent implements OnInit {
     this.curUser(this.userNum); // Set to autofill the mock user (0: Scott, 1: Generic)
   }
 
-  setUser(num: number){
+  setTextFieldColors() {
+    let emailTextField = <TextField>this.email.nativeElement;
+    let passwordTextField = <TextField>this.password.nativeElement;
+
+    let mainTextColor = new Color(this.isLoggingIn ? "black" : "#C4AFB4");
+    emailTextField.color = mainTextColor;
+    passwordTextField.color = mainTextColor;
+
+    let hintColor = new Color(this.isLoggingIn ? "#ACA6A7" : "#C4AFB4");
+    setHintColor({ view: emailTextField, color: hintColor });
+    setHintColor({ view: passwordTextField, color: hintColor });
+  }
+
+  setUser(num: number) {
     this.userNum = num;
     this.curUser(this.userNum);
   }
-  
+
   curUser(id: number) {
     this.mockUserService.getUser(id)
       .then(res => {
@@ -55,7 +73,7 @@ export class LoginComponent implements OnInit {
     //alert("You're using: " + this.user.email);
     console.log(`hello ${new Date()}`);
 
-    if(!this.user.isValidEmail()){
+    if (!this.user.isValidEmail()) {
       alert("Enter a valid email address");
       return;
     }
@@ -74,7 +92,7 @@ export class LoginComponent implements OnInit {
       (error) => alert("Unfortunately we could not find your account.")
       );
   }
-  
+
   signUp() {
     this.userService.register(this.user)
       .subscribe(
@@ -88,6 +106,7 @@ export class LoginComponent implements OnInit {
 
   toggleDisplay() {
     this.isLoggingIn = !this.isLoggingIn;
+    this.setTextFieldColors();
     let container = <View>this.container.nativeElement;
     container.animate({
       backgroundColor: this.isLoggingIn ? new Color("white") : new Color("#301217"),
