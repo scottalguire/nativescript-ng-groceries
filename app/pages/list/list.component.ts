@@ -31,7 +31,7 @@ export class ListComponent implements OnInit {
                     this.isLoading = false;
                     this.listLoaded = true;
                 });
-        }, 3000);
+        }, 1000);
     }
 
     add() {
@@ -52,12 +52,34 @@ export class ListComponent implements OnInit {
             },
             () => {
                 alert({
-                    message: "An error occurred while adding an itme to your list.",
+                    message: "An error occurred while adding an item to your list.",
                     okButtonText: "OK"
                 });
                 this.grocery = "";
             }
             )
+    }
+
+    delete(id: string, name: string) {
+
+        this.groceryListService.delete(id)
+            .subscribe(
+            () => {
+                //console.log("Prior to removal:"+ "\n" + JSON.stringify(this.groceryList));
+                this.groceryList = this.groceryList.filter(item => item.id !== id);
+                //console.log("Post removal:" + "\n" + JSON.stringify(this.groceryList));
+                alert({
+                    message: `${name} has been removed from the list.`,
+                    okButtonText: "OK"
+                });
+            },
+            () => {
+                alert({
+                    message: `An error occurred while removing ${name} from your list.`,
+                    okButtonText: "OK"
+                });
+            });
+
     }
 
     share() {
